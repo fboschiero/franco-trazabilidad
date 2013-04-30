@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.4"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+	<context-param>
+		<param-name>javax.faces.CONFIG_FILES</param-name>
+		<param-value>/WEB-INF/faces-config.xml</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>server</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>org.richfaces.SKIN</param-name>
+		<param-value>wine</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>org.richfaces.CONTROL_SKINNING</param-name>
+		<param-value>enable</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>org.richfaces.CONTROL_SKINNING_CLASSES</param-name>
+		<param-value>disable</param-value>
+	</context-param>
+
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	
+	<filter>
+		<filter-name>AuthenticationFilter</filter-name>
+		<filter-class>
+			trazabilidad.common.filters.AuthenticationFilter
+		</filter-class>
+	</filter>
+
+	<filter>
+		<display-name>Ajax4jsf Filter</display-name>
+		<filter-name>ajax4jsf</filter-name>
+		<filter-class>org.ajax4jsf.Filter</filter-class>
+		<init-param>
+			<param-name>forceparser</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>enable-cache</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/protected/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>ajax4jsf</filter-name>
+		<url-pattern>*.jsf</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+	</filter-mapping>
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<error-page>
+		<error-code>401</error-code>
+		<location>/protected/error.jsp</location>
+	</error-page>
+
+	<error-page>
+		<error-code>403</error-code>
+		<location>/protected/error.jsp</location>
+	</error-page>
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/protected/error.jsp</location>
+	</error-page>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/protected/error.jsp</location>
+	</error-page>
+
+	<error-page>
+		<error-code>503</error-code>
+		<location>/protected/error.jsp</location>
+	</error-page>
+	
+	<!-- Comentar la security-constraint si no se quiere usar HTTPS -->
+	<!--
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>SSL_required</web-resource-name>
+			<url-pattern>/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+		</web-resource-collection>
+		<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+ 	-->
+</web-app>

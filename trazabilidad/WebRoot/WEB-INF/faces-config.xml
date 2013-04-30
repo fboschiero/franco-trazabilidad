@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+ "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+<faces-config>
+	
+	<application>
+		<locale-config>
+			<default-locale>es</default-locale>
+			<supported-locale>es_UY</supported-locale>
+		</locale-config>
+	</application>
+	
+	<!-- **** CONVERTERS **** -->
+		
+		<converter>
+			<converter-id>ProveedorConverter</converter-id>
+			<converter-class>trazabilidad.converters.ProveedorConverter</converter-class>
+		</converter>
+		
+		<converter>
+			<converter-id>MateriaPrimaConverter</converter-id>
+			<converter-class>trazabilidad.converters.MateriaPrimaConverter</converter-class>
+		</converter>
+		
+		<converter>
+			<converter-id>TipoMateriaPrimaConverter</converter-id>
+			<converter-class>trazabilidad.converters.TipoMateriaPrimaConverter</converter-class>
+		</converter>
+		
+	<!-- **** FIN CONVERTERS **** -->
+	
+	<!-- **** MANAGED BEANS **** -->
+		<managed-bean>
+			<managed-bean-name>loginBean</managed-bean-name>
+			<managed-bean-class>trazabilidad.common.beans.generico.LoginBean</managed-bean-class>
+			<managed-bean-scope>request</managed-bean-scope>
+		</managed-bean>
+		
+		<managed-bean>
+			<managed-bean-name>jamonartesanal</managed-bean-name>
+			<managed-bean-class>trazabilidad.beans.jamonartesanal.JamonArtesanalBackingBean</managed-bean-class>
+			<managed-bean-scope>session</managed-bean-scope>
+		</managed-bean>
+		
+		<managed-bean>
+			<managed-bean-name>proveedoresBean</managed-bean-name>
+			<managed-bean-class>trazabilidad.beans.abms.ProveedoresBackingBean</managed-bean-class>
+			<managed-bean-scope>session</managed-bean-scope>
+		</managed-bean>
+		
+		<managed-bean>
+			<managed-bean-name>materiasPrimasBean</managed-bean-name>
+			<managed-bean-class>trazabilidad.beans.abms.MateriasPrimasBackingBean</managed-bean-class>
+			<managed-bean-scope>session</managed-bean-scope>
+		</managed-bean>
+		
+		<managed-bean>
+			<managed-bean-name>tipoMateriasPrimasBean</managed-bean-name>
+			<managed-bean-class>trazabilidad.beans.abms.TipoMateriasPrimasBackingBean</managed-bean-class>
+			<managed-bean-scope>session</managed-bean-scope>
+		</managed-bean>
+		
+		<managed-bean>
+			<managed-bean-name>entregasBean</managed-bean-name>
+			<managed-bean-class>trazabilidad.beans.abms.EntregasBackingBean</managed-bean-class>
+			<managed-bean-scope>request</managed-bean-scope>
+		</managed-bean>
+		
+		<managed-bean>
+			<managed-bean-name>stockBean</managed-bean-name>
+			<managed-bean-class>trazabilidad.beans.stock.StockBackingBean</managed-bean-class>
+			<managed-bean-scope>request</managed-bean-scope>
+		</managed-bean>
+		
+		<managed-bean>
+			<managed-bean-name>loteBean</managed-bean-name>
+			<managed-bean-class>trazabilidad.beans.lote.LoteBackingBean</managed-bean-class>
+			<managed-bean-scope>request</managed-bean-scope>
+		</managed-bean>
+	
+	<!-- **** FIN MANAGED BEANS **** -->
+	
+	<!-- **** NAVIGATION RULES **** -->
+		<navigation-rule>
+			<from-view-id>*</from-view-id>
+			<navigation-case>
+				<from-outcome>irInicio</from-outcome>
+				<to-view-id>/login.jsp</to-view-id>
+				<redirect />
+			</navigation-case>
+		</navigation-rule>
+		
+		<navigation-rule>
+			<from-view-id>/login.jsp</from-view-id>
+			<navigation-case>
+				<from-outcome>irPrincipal</from-outcome>
+				<to-view-id>/protected/inicio.jsp</to-view-id>
+				<redirect />
+			</navigation-case>
+		</navigation-rule>
+		
+		<!-- **** Pantalla de Inicio **** -->
+			<navigation-rule>
+				<from-view-id>/protected/inicio.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>irAJAmonArtesanal</from-outcome>
+					<to-view-id>/protected/jamonartesanal.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+			
+			<navigation-rule>
+				<from-view-id>/protected/inicio.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>irAProveedores</from-outcome>
+					<to-view-id>/protected/abms/proveedores.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+			
+			<navigation-rule>
+				<from-view-id>/protected/inicio.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>irMateriasPrimas</from-outcome>
+					<to-view-id>/protected/abms/materiasprimas.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+			
+			<navigation-rule>
+				<from-view-id>/protected/inicio.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>irAIngresoDeEntregas</from-outcome>
+					<to-view-id>/protected/entregas/ingresoentrega.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+			
+			<navigation-rule>
+				<from-view-id>/protected/inicio.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>irAListadoDeEntregas</from-outcome>
+					<to-view-id>/protected/entregas/listadoentregas.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+			
+			<navigation-rule>
+				<from-view-id>/protected/inicio.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>irAStock</from-outcome>
+					<to-view-id>/protected/stock/stock.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+			
+			<navigation-rule>
+				<from-view-id>/protected/inicio.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>irATipoMateriaPrima</from-outcome>
+					<to-view-id>/protected/abms/tipo_materia_prima.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+			
+			<navigation-rule>
+				<from-view-id>/protected/inicio.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>irAListadoDeLotes</from-outcome>
+					<to-view-id>/protected/lotes/listado_lotes.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+				
+		<!-- **** Pantalla de Jamon Artesanal **** -->
+			<navigation-rule>
+				<from-view-id>/protected/jamonartesanal.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>error</from-outcome>
+					<to-view-id>/protected/jamonartesanal.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+				<navigation-case>
+					<from-outcome>imprimirNroLote</from-outcome>
+					<to-view-id>/protected/imprimirnrolote.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+				<navigation-case>
+					<from-outcome>volver</from-outcome>
+					<to-view-id>/protected/inicio.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+		<!-- **** Fin Pantalla de Jamon Artesanal **** -->	
+		
+		<!-- **** Pantalla de Proveedores **** -->
+			<navigation-rule>
+				<from-view-id>/protected/abms/proveedores.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>volver</from-outcome>
+					<to-view-id>/protected/inicio.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+		
+		<!-- **** FIN Pantalla de Proveedores **** -->
+		
+		<!-- **** Pantalla de Materias primas **** -->
+			<navigation-rule>
+				<from-view-id>/protected/abms/materiasprimas.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>volver</from-outcome>
+					<to-view-id>/protected/inicio.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+			
+			<navigation-rule>
+				<from-view-id>/protected/abms/materiasprimas.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>irATipoMateriasPrimas</from-outcome>
+					<to-view-id>/protected/abms/tipo_materia_prima.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+		
+		<!-- **** FIN Pantalla de Materias primas **** -->
+		
+		<!-- **** Pantalla de Materias primas **** -->
+			<navigation-rule>
+				<from-view-id>/protected/abms/tipo_materia_prima.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>volver</from-outcome>
+					<to-view-id>/protected/inicio.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+		
+		<!-- **** FIN Pantalla de Materias primas **** -->
+		
+		<!-- **** Pantalla de Entregas **** -->
+			<navigation-rule>
+				<from-view-id>/protected/entregas/ingresoentrega.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>volver</from-outcome>
+					<to-view-id>/protected/inicio.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+			
+			<!-- **** Listados **** -->
+			
+			<navigation-rule>
+				<from-view-id>/protected/entregas/listadoentregas.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>volver</from-outcome>
+					<to-view-id>/protected/inicio.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+		
+		<!-- **** FIN Pantalla de Entregas **** -->
+		
+		<!-- **** Pantalla de Stock **** -->
+			<navigation-rule>
+				<from-view-id>/protected/stock/stock.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>volver</from-outcome>
+					<to-view-id>/protected/inicio.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+		
+		<!-- **** FIN Pantalla de Stock **** -->
+		
+		<!-- **** Pantalla de listado de lotes **** -->
+			<navigation-rule>
+				<from-view-id>/protected/lotes/listado_lotes.jsp</from-view-id>
+				<navigation-case>
+					<from-outcome>volver</from-outcome>
+					<to-view-id>/protected/inicio.jsp</to-view-id>
+					<redirect />
+				</navigation-case>
+			</navigation-rule>
+		
+		<!-- **** FIN Pantalla de listado de lotes **** -->
+	
+	
+	<!-- **** FIN NAVIGATION RULES **** -->
+</faces-config>
