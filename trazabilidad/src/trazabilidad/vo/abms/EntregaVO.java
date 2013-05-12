@@ -18,8 +18,9 @@ public class EntregaVO  implements Serializable {
 	private Date fechaVencimiento;
 	private Integer cantidadPallets;
 	private Integer cantidadCajas;
+	private String unidad;
 	
-	public EntregaVO(Date fechaIngreso, ProveedorVO proveedor, MateriaPrimaVO materiaPrima, Double cantidad, BigDecimal tempIngreso, Date fechaElaboracion, Date fechaVencimiento, Integer cantidadPallets, Integer cantidadCajas) {
+	public EntregaVO(Date fechaIngreso, ProveedorVO proveedor, MateriaPrimaVO materiaPrima, Double cantidad, BigDecimal tempIngreso, Date fechaElaboracion, Date fechaVencimiento, Integer cantidadPallets, Integer cantidadCajas, String unidad) {
 		super();
 		this.fechaIngreso = fechaIngreso;
 		this.proveedor = proveedor;
@@ -30,6 +31,7 @@ public class EntregaVO  implements Serializable {
 		this.fechaVencimiento = fechaVencimiento;
 		this.cantidadPallets = cantidadPallets;
 		this.cantidadCajas = cantidadCajas;
+		this.unidad = unidad;
 	}
 
 	public EntregaVO() {
@@ -114,5 +116,13 @@ public class EntregaVO  implements Serializable {
 
 	public void setTempIngreso(BigDecimal tempIngreso) {
 		this.tempIngreso = tempIngreso;
+	}
+
+	public String getUnidad() {
+		return unidad;
+	}
+
+	public void setUnidad(String unidad) {
+		this.unidad = unidad;
 	}
 }

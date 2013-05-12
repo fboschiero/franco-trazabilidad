@@ -19,7 +19,7 @@ import trazabilidad.vo.abms.ProveedorVO;
 public class EntregasDAO extends AbstractDAO {
 
 	private String TABLE_NAME = "entregas";
-	private String SQL_INSERT_ENTREGA = "INSERT INTO entregas VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private String SQL_INSERT_ENTREGA = "INSERT INTO entregas VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private String SQL_SELECT_ALL_ENTREGAS = " SELECT * FROM entregas "; 
 	
 	public void ingresarNuevaEntrega(EntregaVO nuevaEntrega) throws EntregasException {
@@ -85,6 +85,7 @@ public class EntregasDAO extends AbstractDAO {
 			
 			pstm.setInt(9, nuevaEntrega.getCantidadPallets());
 			pstm.setInt(10, nuevaEntrega.getCantidadCajas());
+			pstm.setString(11, nuevaEntrega.getUnidad());
 							
 			result = pstm.executeUpdate();
 			
@@ -143,6 +144,7 @@ public class EntregasDAO extends AbstractDAO {
 				entrega.setFechaVencimiento(result.getDate(8));
 				entrega.setCantidadPallets(result.getInt(9));
 				entrega.setCantidadCajas(result.getInt(10));
+				entrega.setUnidad(result.getString(11));
 				
 				entregas.add(entrega);
 			}

@@ -33,19 +33,19 @@ public class JamonArtesanalServices {
 		return jamonDAO.findLoteByNro(nroLote);
 	}
 
-	public void guardarFinInyeccion(Integer id, String horaSalidaInyeccion, BigDecimal tempSalidaInyeccion, String usuarioInyeccion) throws JamonArtesanalException {
+	public void guardarEtapaBombo(Integer id, String horaIngresoBombo, String horaSalidaBombo, String usuarioBombo) throws JamonArtesanalException {
 		jamonDAO = new JamonArtesanalDAO();
-		jamonDAO.guardarFinInyeccion(id, horaSalidaInyeccion, tempSalidaInyeccion, usuarioInyeccion);
+		jamonDAO.guardarEtapaBombo(id, horaIngresoBombo, horaSalidaBombo, usuarioBombo);
 	}
 
-	public void guardarInicioCoccion(Integer id, String horaIngresoCoccion, BigDecimal tempIngresoCoccion, String nroTacho, String usuarioCoccion) throws JamonArtesanalException {
+	public void guardarCoccion(Integer id, String horaIngresoCoccion, BigDecimal tempIngresoCoccion, String nroTacho, String horaSalidaCoccion, BigDecimal tempSalidaCoccion, String usuarioCoccion) throws JamonArtesanalException {
 		jamonDAO = new JamonArtesanalDAO();
-		jamonDAO.guardarInicioCoccion(id, horaIngresoCoccion, tempIngresoCoccion, nroTacho, usuarioCoccion);
+		jamonDAO.guardarCoccion(id, horaIngresoCoccion, tempIngresoCoccion, nroTacho, horaSalidaCoccion, tempSalidaCoccion, usuarioCoccion);
 	}
 
-	public void guardarFinCoccion(Integer id, String horaSalidaCoccion, BigDecimal tempSalidaCoccion, String usuarioCoccion) throws JamonArtesanalException {
+	public void guardarEnfriado(Integer id, Integer nroTachoEnfriado, String horaSalidaACamara, BigDecimal tempSalidaACamara) throws JamonArtesanalException {
 		jamonDAO = new JamonArtesanalDAO();
-		jamonDAO.guardarFinCoccion(id, horaSalidaCoccion, tempSalidaCoccion, usuarioCoccion);
+		jamonDAO.guardarEnfriado(id, nroTachoEnfriado, horaSalidaACamara, tempSalidaACamara);
 	}
 	
 	public List<LoteJamonArtesanalVO> obtenerTodosLosLotes() throws JamonArtesanalException{

@@ -88,7 +88,7 @@
 					
 					<rich:column>
 						<f:facet name="header">
-							<h:outputText value="#{labels.jamonartesanal_nroLote}" />
+							<h:outputText value="#{labels.jamonartesanal_kgDeCarne}" />
 						</f:facet>
 						<h:outputText value="#{lote.kgCarne}" />
 					</rich:column>
@@ -104,7 +104,8 @@
 						<f:facet name="header">
 							<h:outputText value="#{labels.jamonartesanal_tempIngreso}" />
 						</f:facet>
-						<h:outputText value="#{lote.tempIngresoInyeccion}" />
+						<h:outputText value="#{lote.tempIngresoInyeccion} ºC" rendered="#{lote.tempIngresoInyeccion > 9}" title="Jamon se abre, separacion de las pulpas en producto terminado" style="background: red"/>
+						<h:outputText value="#{lote.tempIngresoInyeccion} ºC" rendered="#{lote.tempIngresoInyeccion <= 9}"/>
 					</rich:column>
 					
 					<rich:column>
@@ -125,7 +126,7 @@
 						<f:facet name="header">
 							<h:outputText value="#{labels.jamonartesanal_tempSalida}" />
 						</f:facet>
-						<h:outputText value="#{lote.tempSalidaInyeccion}" />
+						<h:outputText value="#{lote.tempSalidaInyeccion} ºC" />
 					</rich:column>			
 							
 					<rich:column>
@@ -139,7 +140,7 @@
 						<f:facet name="header">
 							<h:outputText value="#{labels.jamonartesanal_tempIngreso}" />
 						</f:facet>
-						<h:outputText value="#{lote.tempIngresoCoccion}" />
+						<h:outputText value="#{lote.tempIngresoCoccion} ºC" />
 					</rich:column>	
 					
 					<rich:column>
@@ -160,7 +161,8 @@
 						<f:facet name="header">
 							<h:outputText value="#{labels.jamonartesanal_tempSalida}" />
 						</f:facet>
-						<h:outputText value="#{lote.tempSalidaCoccion}" />
+						<h:outputText value="#{lote.tempSalidaCoccion} ºC" rendered="#{lote.tempSalidaCoccion < 70}" title="Jamones crudos, problemas microbiologicos por no destruccion de microorganismos patógenos" style="background: red"/>
+						<h:outputText value="#{lote.tempSalidaCoccion} ºC" rendered="#{lote.tempSalidaCoccion >= 70}"/>
 					</rich:column>		
 									
 					<rich:column>
@@ -179,7 +181,7 @@
 				
 			</h:form>	
 			
-			<rich:modalPanel id="popupDetalleLote" height="350" width="400">
+			<rich:modalPanel id="popupDetalleLote" height="550" width="400">
 				<f:facet name="header">
 	                <h:outputLabel value="#{labels.lote_pop_up_titulo}"></h:outputLabel>
 		        </f:facet>
@@ -190,48 +192,107 @@
 		            </a4j:commandLink>
 		        </f:facet>
 				
-				<a4j:form id="formDetalleLote">
-					<rich:panel style="height: 300; overflow: auto; border: 0;">
-						<h:panelGrid columns="2" width="100%" >
+				<a4j:form id="formDetalleLote" style="height: 500; overflow: auto; border: 0;">
+					
+							<rich:panel >	
+								<f:facet name="header">
+					                <h:outputLabel value="INYECCION"></h:outputLabel>
+						        </f:facet>				
+								<h:panelGrid columns="2" border="0" cellpadding="2" cellspacing="1" >
+									<h:outputText value="#{labels.jamonartesanal_nroLote}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.nroLote}" />
+									
+									<h:outputText value="#{labels.generic_fecha}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.fechaCreado}" >
+										<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+									</h:outputText>
+									
+									<h:outputText value="#{labels.generic_proveedor}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.proveedor.nombre}" />
+									
+									<h:outputText value="#{labels.jamonartesanal_kgDeCarne}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.kgCarne}" />
+								
+									<h:outputText value="#{labels.jamonartesanal_horaIngreso}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.horaIngresoInyeccion}" />
+									
+									<h:outputText value="#{labels.jamonartesanal_tempIngreso}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.tempIngresoInyeccion} ºC" />
+									
+									<h:outputText value="#{labels.jamonartesanal_tempSalmuera}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.tempSalmuera} ºC" />
+									
+									<h:outputText value="#{labels.jamonartesanal_horaSalida}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.horaSalidaInyeccion}" />
+									
+									<h:outputText value="#{labels.jamonartesanal_tempSalida}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.tempSalidaInyeccion} ºC" />
+									
+									<h:outputText value="#{labels.login_usuario}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.operarioResponsableInyeccion}" />
+								</h:panelGrid>	
+							</rich:panel>
+							
+							<rich:panel>
+								<f:facet name="header">
+					                <h:outputLabel value="BOMBO"></h:outputLabel>
+						        </f:facet>						
+								<h:panelGrid columns="2" border="0" cellpadding="2" cellspacing="1" >
+									<h:outputText value="#{labels.jamonartesanal_horaIngresoBombo}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.horaIngresoBombo}" />
+									
+									<h:outputText value="#{labels.jamonartesanal_horaSalidaBombo}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.horaSalidaBombo}" />
+								
+									<h:outputText value="#{labels.login_usuario}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.operarioResponsableInyeccion}" />
+								</h:panelGrid>
+							</rich:panel>
 						
-							<h:outputText value="#{labels.jamonartesanal_nroLote}" />
-							<h:outputText value="#{loteBean.loteSeleccionado.nroLote}" />
-							
-							<h:outputText value="#{labels.jamonartesanal_kgDeCarne}" />
-							<h:outputText value="#{loteBean.loteSeleccionado.kgCarne}" />
+							<rich:panel>
+								<f:facet name="header">
+					                <h:outputLabel value="COCCION"></h:outputLabel>
+						        </f:facet>			
+								<h:panelGrid columns="2" border="0" cellpadding="2" cellspacing="1" >
+																						
+									<h:outputText value="#{labels.jamonartesanal_horaIngreso}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.horaIngresoCoccion}" />
+											
+									<h:outputText value="#{labels.jamonartesanal_tempIngreso}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.tempIngresoCoccion} ºC" />
+									
+									<h:outputText value="#{labels.jamonartesanal_nroTacho}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.nroTacho}" />
+																	
+									<h:outputText value="#{labels.jamonartesanal_horaSalida}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.horaSalidaCoccion}" />
+									
+									<h:outputText value="#{labels.jamonartesanal_tempSalida}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.tempSalidaCoccion} ºC" />								
+																	
+									<h:outputText value="#{labels.login_usuario}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.operarioResponsableCoccion}" />
+								
+								</h:panelGrid>
+							</rich:panel>
 						
-							<h:outputText value="#{labels.jamonartesanal_horaIngreso}" />
-							<h:outputText value="#{loteBean.loteSeleccionado.horaIngresoInyeccion}" />
-							
-							<h:outputText value="#{labels.jamonartesanal_tempIngreso}" />
-							<h:outputText value="#{loteBean.loteSeleccionado.tempIngresoInyeccion}" />
-							
-							<h:outputText value="#{labels.login_usuario}" />
-							<h:outputText value="#{loteBean.loteSeleccionado.operarioResponsableInyeccion}" />
-						
-							<h:outputText value="#{labels.jamonartesanal_horaSalida}" />
-							<h:outputText value="#{loteBean.loteSeleccionado.horaSalidaInyeccion}" />
-							
-							<h:outputText value="#{labels.jamonartesanal_tempSalida}" />
-							<h:outputText value="#{loteBean.loteSeleccionado.tempSalidaInyeccion}" />
-						
-							<h:outputText value="#{labels.jamonartesanal_horaIngreso}" />
-							<h:outputText value="#{loteBean.loteSeleccionado.horaIngresoCoccion}" />
-							
-							<h:outputText value="#{labels.jamonartesanal_tempIngreso}" />
-							<h:outputText value="#{loteBean.loteSeleccionado.tempIngresoCoccion}" />
-							
-							<h:outputText value="#{labels.jamonartesanal_nroTacho}" />
-							<h:outputText value="#{loteBean.loteSeleccionado.nroTacho}" rendered="#{loteBean.loteSeleccionado.nroTacho > 0}"/>
-							<h:outputText value="" rendered="#{loteBean.loteSeleccionado.nroTacho == 0}"/>
+							<rich:panel>
+								<f:facet name="header">
+					                <h:outputLabel value="ENFRIADO"></h:outputLabel>
+						        </f:facet>	
+						        <h:panelGrid columns="2" border="0" cellpadding="2" cellspacing="1" >
 														
-							<h:outputText value="#{labels.jamonartesanal_horaSalida}" />
-							<h:outputText value="#{loteBean.loteSeleccionado.horaSalidaCoccion}" />
-							
-							<h:outputText value="#{labels.jamonartesanal_tempSalida}" />
-							<h:outputText value="#{loteBean.loteSeleccionado.tempSalidaCoccion}" />
-						
-						</h:panelGrid>
+									<h:outputText value="#{labels.jamonartesanal_nroTacho_salida}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.nroTachoEnfriado}" />
+																	
+									<h:outputText value="#{labels.jamonartesanal_horaSalidaCamara}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.horaSalidaACamara}" />
+									
+									<h:outputText value="#{labels.jamonartesanal_tempSalidaCamara}" style="font-weight: bold"/>
+									<h:outputText value="#{loteBean.loteSeleccionado.tempSalidaACamara}" />	
+									
+								</h:panelGrid>
+							</rich:panel>		
 						
 						<br/>
 						<div align="center">
@@ -240,7 +301,6 @@
 								<rich:componentControl for="popupDetalleLote" operation="hide" event="onclick"/>
 							</a4j:commandButton>
 						</div>
-					</rich:panel>
 				</a4j:form>
 			</rich:modalPanel>
 		</f:view>

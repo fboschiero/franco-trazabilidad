@@ -50,6 +50,9 @@
 						<h:outputLabel value="#{labels.entregas_fecha_vencimiento}" />
 						<rich:calendar value="#{entregasBean.fechaVencimiento}" direction="auto" inputSize="10" datePattern="dd/MM/yyyy"  />
 						
+						<h:outputText value="#{labels.entregas_unidad}" />
+						<h:inputText value="#{entregasBean.unidad}"/>
+						
 						<h:outputText value="#{labels.entregas_cantidad_pallets}" />
 						<h:inputText value="#{entregasBean.cantidadPallets}"/>
 						

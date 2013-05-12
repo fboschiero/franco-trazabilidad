@@ -64,7 +64,7 @@
 					</rich:simpleTogglePanel>
 				</div>
 				<br/>
-				<rich:dataTable id="tablaEntregas" value="#{entregasBean.entregas}" var="entrega" align="center" columnClasses="col,col,col,colImage,colImage">
+				<rich:dataTable id="tablaEntregas" value="#{entregasBean.entregas}" var="entrega" align="center" >
 					<f:facet name="header">
 		                <h:outputLabel value="#{labels.entregas_listado}"></h:outputLabel>
 			        </f:facet>
@@ -102,7 +102,7 @@
 						<f:facet name="header">
 							<h:outputText value="#{labels.entregas_temp_ingreso}" />
 						</f:facet>
-						<h:outputText value="#{entrega.tempIngreso}" />
+						<h:outputText value="#{entrega.tempIngreso} ºC." />
 					</rich:column>
 					
 					<rich:column>
@@ -121,6 +121,13 @@
 						<h:outputText value="#{entrega.fechaVencimiento}" >
 							<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
 						</h:outputText>
+					</rich:column>
+					
+					<rich:column>
+						<f:facet name="header">
+							<h:outputText value="#{labels.entregas_unidad}" />
+						</f:facet>
+						<h:outputText value="#{entrega.unidad}" />
 					</rich:column>
 					
 					<rich:column>

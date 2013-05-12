@@ -3,6 +3,8 @@ package trazabilidad.vo.lotes;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import trazabilidad.vo.abms.ProveedorVO;
+
 public class LoteJamonArtesanalVO extends LoteVO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -19,12 +21,19 @@ public class LoteJamonArtesanalVO extends LoteVO implements Serializable {
 	private BigDecimal tempSalidaCoccion;
 	private String operarioResponsableCoccion;
 	private int nroTacho;
+	private ProveedorVO proveedor;
+	private BigDecimal tempSalmuera;
+	private String horaIngresoBombo;
+	private String horaSalidaBombo;
+	private Integer nroTachoEnfriado; 
+	private String horaSalidaACamara; 
+	private BigDecimal tempSalidaACamara;
 	
 	public LoteJamonArtesanalVO() {
 		super();
 	}
 
-	public LoteJamonArtesanalVO(BigDecimal kgCarne, String horaIngresoInyeccion, BigDecimal tempIngresoInyeccion, String horaSalidaInyeccion, BigDecimal tempSalidaInyeccion, String operarioResponsableInyeccion) {
+	public LoteJamonArtesanalVO(BigDecimal kgCarne, String horaIngresoInyeccion, BigDecimal tempIngresoInyeccion, String horaSalidaInyeccion, BigDecimal tempSalidaInyeccion, String operarioResponsableInyeccion, ProveedorVO proveedor, BigDecimal temSalmuera) {
 		super();
 		this.kgCarne = kgCarne;
 		this.horaIngresoInyeccion = horaIngresoInyeccion;
@@ -32,6 +41,8 @@ public class LoteJamonArtesanalVO extends LoteVO implements Serializable {
 		this.horaSalidaInyeccion = horaSalidaInyeccion;
 		this.tempSalidaInyeccion = tempSalidaInyeccion;
 		this.operarioResponsableInyeccion = operarioResponsableInyeccion;
+		this.proveedor = proveedor;
+		this.tempSalmuera = temSalmuera;
 	}
 
 	public LoteJamonArtesanalVO(LoteVO absLote) {
@@ -132,5 +143,61 @@ public class LoteJamonArtesanalVO extends LoteVO implements Serializable {
 
 	public void setTempSalidaInyeccion(BigDecimal tempSalidaInyeccion) {
 		this.tempSalidaInyeccion = tempSalidaInyeccion;
+	}
+
+	public ProveedorVO getProveedor() {
+		return proveedor;
+	}
+
+	public void setProveedor(ProveedorVO proveedor) {
+		this.proveedor = proveedor;
+	}
+
+	public BigDecimal getTempSalmuera() {
+		return tempSalmuera;
+	}
+
+	public void setTempSalmuera(BigDecimal tempSalmuera) {
+		this.tempSalmuera = tempSalmuera;
+	}
+
+	public String getHoraSalidaBombo() {
+		return horaSalidaBombo;
+	}
+
+	public void setHoraSalidaBombo(String horaSalidaBombo) {
+		this.horaSalidaBombo = horaSalidaBombo;
+	}
+
+	public String getHoraIngresoBombo() {
+		return horaIngresoBombo;
+	}
+
+	public void setHoraIngresoBombo(String horaIngresoBombo) {
+		this.horaIngresoBombo = horaIngresoBombo;
+	}
+	
+	public String getHoraSalidaACamara() {
+		return horaSalidaACamara;
+	}
+
+	public void setHoraSalidaACamara(String horaSalidaACamara) {
+		this.horaSalidaACamara = horaSalidaACamara;
+	}
+
+	public Integer getNroTachoEnfriado() {
+		return nroTachoEnfriado;
+	}
+
+	public void setNroTachoEnfriado(Integer nroTachoEnfriado) {
+		this.nroTachoEnfriado = nroTachoEnfriado;
+	}
+
+	public BigDecimal getTempSalidaACamara() {
+		return tempSalidaACamara;
+	}
+
+	public void setTempSalidaACamara(BigDecimal tempSalidaACamara) {
+		this.tempSalidaACamara = tempSalidaACamara;
 	}
 }

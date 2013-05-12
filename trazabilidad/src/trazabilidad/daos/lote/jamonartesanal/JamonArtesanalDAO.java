@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import trazabilidad.daos.abms.ProveedorDAO;
 import trazabilidad.daos.generic.AbstractDAO;
 import trazabilidad.daos.lote.LoteDAO;
+import trazabilidad.daos.util.DAOUtils;
 import trazabilidad.exceptions.jamonartesanal.JamonArtesanalException;
 import trazabilidad.exceptions.jamonartesanal.LoteException;
 import trazabilidad.vo.lotes.LoteJamonArtesanalVO;
@@ -17,7 +20,7 @@ import trazabilidad.vo.lotes.LoteVO;
 
 public class JamonArtesanalDAO extends AbstractDAO {
 
-	private String SQL_INSERT_LOTE_JAMON_ARTESANAL = "INSERT INTO lotejamonartesanal VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private String SQL_INSERT_LOTE_JAMON_ARTESANAL = "INSERT INTO lotejamonartesanal VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private String SQL_INGRESAR_COCCION = "UPDATE lotejamonartesanal " +
 										  " SET horaIngresoCoccion = ?," +
 										  "     tempIngresoCoccion = ?," +
@@ -27,15 +30,16 @@ public class JamonArtesanalDAO extends AbstractDAO {
 										  "     operadorCoccion = ? " +
 										  " WHERE id = ? ";
 	
-	private String SQL_UPDATE_FINALIZAR_INYECCION = " UPDATE lotejamonartesanal " +
-												    " 	SET horaSalidaInyeccion = ?, tempSalidaInyeccion = ? " +
-													" WHERE id = ? ";
-	private String SQL_UPDATE_INICIO_COCCION = " UPDATE lotejamonartesanal " +
-												    " 	SET horaIngresoCoccion = ?, tempIngresoCoccion = ?, nroTacho = ? " +
+	private String SQL_UPDATE_ETAPA_BOMBO = " UPDATE lotejamonartesanal " +
+												    " 	SET horaIngresoBombo = ?, horaSalidaBombo = ? " +
 													" WHERE id = ? ";
 	
-	private String SQL_UPDATE_FIN_COCCION = " UPDATE lotejamonartesanal " +
-											   " 	SET horaSalidaCoccion = ?, tempSalidaCoccion = ? " +
+	private String SQL_UPDATE_COCCION = " UPDATE lotejamonartesanal " +
+												    " 	SET horaIngresoCoccion = ?, tempIngresoCoccion = ?, nroTacho = ?, horaSalidaCoccion = ?, tempSalidaCoccion = ?, operadorCoccion = ? " +
+													" WHERE id = ? ";
+	
+	private String SQL_UPDATE_ENFRIAMIENTO = " UPDATE lotejamonartesanal " +
+											   " 	SET nroTachoEnfriamiento = ?, horaSalidaACamara = ?, tempSalidaACamara = ? " +
 											   " WHERE id = ? ";
 	
 	private String SQL_SELECT_LOTE_BY_ID = "SELECT * FROM lotejamonartesanal WHERE id = ?";
@@ -110,7 +114,14 @@ public class JamonArtesanalDAO extends AbstractDAO {
 			pstm.setBigDecimal(11, null);
 			pstm.setBigDecimal(12, null);
 			pstm.setString(13, null);
-			
+			pstm.setInt(14, nuevoLote.getProveedor().getId());
+			pstm.setBigDecimal(15, nuevoLote.getTempSalmuera());
+			pstm.setString(16, null);
+			pstm.setString(17, null);
+			pstm.setInt(18, Types.INTEGER);
+			pstm.setString(19, null);
+			pstm.setString(20, null);
+						
 			result = pstm.executeUpdate();
 			
 			if (result == 0) {
@@ -163,7 +174,7 @@ public class JamonArtesanalDAO extends AbstractDAO {
 		loteDao = new LoteDAO();
 		LoteVO absLote = loteDao.findLoteByNroLote(nroLote);
 		LoteJamonArtesanalVO resu = new LoteJamonArtesanalVO(absLote);
-		
+		DAOUtils util = new DAOUtils();
 		PreparedStatement pstm = null;
 		ResultSet result = null;
 		String sql = SQL_SELECT_LOTE_BY_ID;
@@ -189,6 +200,14 @@ public class JamonArtesanalDAO extends AbstractDAO {
 				resu.setNroTacho(result.getInt(12));
 				resu.setOperarioResponsableCoccion(result.getString(13));
 				
+				ResultSet resultProveedor = findById(ProveedorDAO.TABLE_NAME, result.getInt(14));
+				resu.setProveedor(util.buildProveedor(resultProveedor)); 
+				closeResultSet(resultProveedor);
+				
+				resu.setTempSalmuera(result.getBigDecimal(15));
+				resu.setHoraIngresoBombo(result.getString(16));
+				resu.setHoraSalidaBombo(result.getString(17));
+				
 			}
 
 		} catch (SQLException e) {
@@ -203,15 +222,15 @@ public class JamonArtesanalDAO extends AbstractDAO {
 		
 	}
 
-	public void guardarFinInyeccion(Integer id, String horaSalidaInyeccion, BigDecimal tempSalidaInyeccion, String usuarioInyeccion) throws JamonArtesanalException {
+	public void guardarEtapaBombo(Integer id, String horaIngresoBombo, String horaSalidaBombo, String usuarioBombo) throws JamonArtesanalException {
 		
 		PreparedStatement pstm = null;
-		String sql = SQL_UPDATE_FINALIZAR_INYECCION;
+		String sql = SQL_UPDATE_ETAPA_BOMBO;
 		
 		try {
 			pstm = getConenction().prepareStatement(sql);
-			pstm.setString(1, horaSalidaInyeccion);
-			pstm.setBigDecimal(2, tempSalidaInyeccion);
+			pstm.setString(1, horaIngresoBombo);
+			pstm.setString(2, horaSalidaBombo);
 			pstm.setInt(3, id);
 			
 			pstm.executeUpdate();
@@ -226,17 +245,20 @@ public class JamonArtesanalDAO extends AbstractDAO {
 		}
 	}
 
-	public void guardarInicioCoccion(Integer id, String horaIngresoCoccion, BigDecimal tempIngresoCoccion, String nroTacho, String usuarioCoccion) throws JamonArtesanalException {
+	public void guardarCoccion(Integer id, String horaIngresoCoccion, BigDecimal tempIngresoCoccion, String nroTacho, String horaSalidaCoccion, BigDecimal tempSalidaCoccion, String usuarioCoccion) throws JamonArtesanalException {
 		
 		PreparedStatement pstm = null;
-		String sql = SQL_UPDATE_INICIO_COCCION;
+		String sql = SQL_UPDATE_COCCION;
 		
 		try {
 			pstm = getConenction().prepareStatement(sql);
 			pstm.setString(1, horaIngresoCoccion);
 			pstm.setBigDecimal(2, tempIngresoCoccion);
 			pstm.setString(3, nroTacho);
-			pstm.setInt(4, id);
+			pstm.setString(4, horaSalidaCoccion);
+			pstm.setBigDecimal(5, tempSalidaCoccion);
+			pstm.setString(6, usuarioCoccion);
+			pstm.setInt(7, id);
 			
 			pstm.executeUpdate();
 		
@@ -250,16 +272,17 @@ public class JamonArtesanalDAO extends AbstractDAO {
 		}
 	}
 
-	public void guardarFinCoccion(Integer id, String horaSalidaCoccion, BigDecimal tempSalidaCoccion, String usuarioCoccion) throws JamonArtesanalException {
+	public void guardarEnfriado(Integer id, Integer nroTachoEnfriado, String horaSalidaACamara, BigDecimal tempSalidaACamara) throws JamonArtesanalException {
 		
 		PreparedStatement pstm = null;
-		String sql = SQL_UPDATE_FIN_COCCION;
+		String sql = SQL_UPDATE_ENFRIAMIENTO;
 		
 		try {
 			pstm = getConenction().prepareStatement(sql);
-			pstm.setString(1, horaSalidaCoccion);
-			pstm.setBigDecimal(2, tempSalidaCoccion);
-			pstm.setInt(3, id);
+			pstm.setInt(1, nroTachoEnfriado);
+			pstm.setString(2, horaSalidaACamara);
+			pstm.setBigDecimal(3, tempSalidaACamara);
+			pstm.setInt(4, id);
 			
 			pstm.executeUpdate();
 		
@@ -281,7 +304,7 @@ public class JamonArtesanalDAO extends AbstractDAO {
 		
 		List<LoteJamonArtesanalVO> resu = new ArrayList<LoteJamonArtesanalVO>();
 		LoteJamonArtesanalVO lote = null;
-				
+		DAOUtils util = new DAOUtils();
 		PreparedStatement pstm = null;
 		ResultSet result = null;
 		String sql = SQL_SELECT_ALL_LOTES;
@@ -307,6 +330,18 @@ public class JamonArtesanalDAO extends AbstractDAO {
 				lote.setTempSalidaCoccion(result.getBigDecimal(11));
 				lote.setNroTacho(result.getInt(12));
 				lote.setOperarioResponsableCoccion(result.getString(13));
+				
+				ResultSet resultProveedor = findById(ProveedorDAO.TABLE_NAME, result.getInt(14));
+				lote.setProveedor(util.buildProveedor(resultProveedor)); 
+				closeResultSet(resultProveedor);
+				
+				lote.setTempSalmuera(result.getBigDecimal(15));
+				lote.setHoraIngresoBombo(result.getString(16));
+				lote.setHoraSalidaBombo(result.getString(17));
+				
+				lote.setNroTachoEnfriado(result.getInt(18));
+				lote.setHoraSalidaACamara(result.getString(19));
+				lote.setTempSalidaACamara(result.getBigDecimal(20));
 				
 				// Cargo los datos de la tabla 'lotes'
 				loteDao = new LoteDAO();
@@ -335,9 +370,10 @@ public class JamonArtesanalDAO extends AbstractDAO {
 	}
 
 	public List<LoteJamonArtesanalVO> buscarConFiltros(Date fechaDesde, Date fechaHasta) throws JamonArtesanalException {
+		
 		List<LoteJamonArtesanalVO> resu = new ArrayList<LoteJamonArtesanalVO>();
 		LoteJamonArtesanalVO lote = null;
-				
+		DAOUtils util = new DAOUtils();	
 		PreparedStatement pstm = null;
 		ResultSet result = null;
 		String sql = SQL_SELECT_ALL_LOTES ;
@@ -363,6 +399,18 @@ public class JamonArtesanalDAO extends AbstractDAO {
 				lote.setTempSalidaCoccion(result.getBigDecimal(11));
 				lote.setNroTacho(result.getInt(12));
 				lote.setOperarioResponsableCoccion(result.getString(13));
+				
+				ResultSet resultProveedor = findById(ProveedorDAO.TABLE_NAME, result.getInt(14));
+				lote.setProveedor(util.buildProveedor(resultProveedor)); 
+				closeResultSet(resultProveedor);
+				
+				lote.setTempSalmuera(result.getBigDecimal(15));
+				lote.setHoraIngresoBombo(result.getString(16));
+				lote.setHoraSalidaBombo(result.getString(17));
+				
+				lote.setNroTachoEnfriado(result.getInt(18));
+				lote.setHoraSalidaACamara(result.getString(19));
+				lote.setTempSalidaACamara(result.getBigDecimal(20));
 				
 				// Cargo los datos de la tabla 'lotes'
 				loteDao = new LoteDAO();

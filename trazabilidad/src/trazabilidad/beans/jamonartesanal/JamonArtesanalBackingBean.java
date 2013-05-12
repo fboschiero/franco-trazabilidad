@@ -2,13 +2,17 @@ package trazabilidad.beans.jamonartesanal;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.faces.component.html.HtmlSelectOneRadio;
 
 import trazabilidad.common.beans.generico.GenericBean;
+import trazabilidad.exceptions.abms.ProveedorException;
 import trazabilidad.exceptions.jamonartesanal.JamonArtesanalException;
 import trazabilidad.exceptions.jamonartesanal.LoteException;
+import trazabilidad.services.abms.ProveedorServices;
 import trazabilidad.services.jamonartesanal.JamonArtesanalServices;
+import trazabilidad.vo.abms.ProveedorVO;
 import trazabilidad.vo.lotes.LoteJamonArtesanalVO;
 
 public class JamonArtesanalBackingBean extends GenericBean {
@@ -27,6 +31,12 @@ public class JamonArtesanalBackingBean extends GenericBean {
 	private BigDecimal tempSalidaInyeccion;
 	private String usuarioInyeccion;
 	private String contraseniaInyeccion;
+	private ProveedorVO proveedor;
+	private BigDecimal tempSalmuera;
+	// DATOS DEL BOMBO
+	private String horaIngresoBombo;
+	private String horaSalidaBombo;
+	private String usuarioBombo;
 	// DATOS DE LA COCCION
 	private String horaIngresoCoccion;
 	private BigDecimal tempIngresoCoccion;
@@ -35,16 +45,29 @@ public class JamonArtesanalBackingBean extends GenericBean {
 	private String usuarioCoccion;
 	private String contraseniaCoccion;
 	private String nroTacho;
+	// DATOS DEL ENFRIADO
+	private Integer nroTachoEnfriado;
+	private String horaSalidaACamara;
+	private BigDecimal tempSalidaACamara;
+	
+	private List<ProveedorVO> proveedores;
+	private ProveedorServices proveedoresServices;
 	
 	public JamonArtesanalBackingBean() {
-		
+		proveedoresServices = new ProveedorServices();
+		try {
+			proveedores = proveedoresServices.obtenerTodosLosProveedores();
+		} catch (ProveedorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
 	}
 	
 	public String crearNuevoLote(){
 		
 		// Validar usuario y contrasenia
 		
-		LoteJamonArtesanalVO nuevoLote = new LoteJamonArtesanalVO(getKgCarne(), getHoraIngresoInyeccion(), getTempIngresoInyeccion(), getHoraSalidaInyeccion(), getTempSalidaInyeccion(), getUsuarioInyeccion());
+		LoteJamonArtesanalVO nuevoLote = new LoteJamonArtesanalVO(getKgCarne(), getHoraIngresoInyeccion(), getTempIngresoInyeccion(), getHoraSalidaInyeccion(), getTempSalidaInyeccion(), getUsuarioInyeccion(), getProveedor(), getTempSalmuera());
 		nuevoLote.setFechaCreado(new Date());
 		nuevoLote.setOperarioResponsableInyeccion(getUsuarioInyeccion());
 				
@@ -67,7 +90,7 @@ public class JamonArtesanalBackingBean extends GenericBean {
 		// FIN de la inyeccion
 		jamonServices = new JamonArtesanalServices();
 		try {
-			jamonServices.guardarFinInyeccion(lote.getId(), getHoraSalidaInyeccion(), getTempSalidaInyeccion(), getUsuarioInyeccion());
+			jamonServices.guardarEtapaBombo(lote.getId(), getHoraIngresoBombo(), getHoraSalidaBombo(), getUsuarioBombo());
 			limpiar();
 		} catch (JamonArtesanalException e) {
 			e.printStackTrace();
@@ -78,7 +101,7 @@ public class JamonArtesanalBackingBean extends GenericBean {
 		//	INICIO de la coccion
 		jamonServices = new JamonArtesanalServices();
 		try {
-			jamonServices.guardarInicioCoccion(lote.getId(), getHoraIngresoCoccion(), getTempIngresoCoccion(), getNroTacho(), getUsuarioCoccion());
+			jamonServices.guardarCoccion(lote.getId(), getHoraIngresoCoccion(), getTempIngresoCoccion(), getNroTacho(), getHoraSalidaCoccion(), getTempSalidaCoccion(), getUsuarioCoccion());
 			limpiar();
 		} catch (JamonArtesanalException e) {
 			e.printStackTrace();
@@ -90,7 +113,7 @@ public class JamonArtesanalBackingBean extends GenericBean {
 		//	FIN de la coccion
 		jamonServices = new JamonArtesanalServices();
 		try {
-			jamonServices.guardarFinCoccion(lote.getId(), getHoraSalidaCoccion(), getTempSalidaCoccion(), getUsuarioCoccion());
+			jamonServices.guardarEnfriado(lote.getId(), getNroTachoEnfriado(), getHoraSalidaACamara(), getTempSalidaACamara());
 			limpiar();
 		} catch (JamonArtesanalException e) {
 			e.printStackTrace();
@@ -121,6 +144,8 @@ public class JamonArtesanalBackingBean extends GenericBean {
 		tempSalidaInyeccion = null;
 		usuarioInyeccion = null;
 		contraseniaInyeccion = null;
+		proveedor = null;
+		tempSalmuera = null;
 		// DATOS DE LA COCCION
 		horaIngresoCoccion = null;
 		tempIngresoCoccion = null;
@@ -129,6 +154,15 @@ public class JamonArtesanalBackingBean extends GenericBean {
 		usuarioCoccion = null;
 		contraseniaCoccion = null;
 		nroTacho = null;
+		// DATOS DEL BOMBO
+		horaIngresoBombo = null;
+		horaSalidaBombo = null;
+		usuarioBombo = null;
+		
+		// DATOS DEL ENFRIADO
+		nroTachoEnfriado = null;
+		horaSalidaACamara = null;
+		tempSalidaACamara = null;
 	}
 	
 	public String getContraseniaInyeccion() {
@@ -266,4 +300,78 @@ public class JamonArtesanalBackingBean extends GenericBean {
 	public void setUsuarioCoccion(String usuarioCoccion) {
 		this.usuarioCoccion = usuarioCoccion;
 	}
+
+	public ProveedorVO getProveedor() {
+		return proveedor;
+	}
+
+	public void setProveedor(ProveedorVO proveedor) {
+		this.proveedor = proveedor;
+	}
+
+	public BigDecimal getTempSalmuera() {
+		return tempSalmuera;
+	}
+
+	public void setTempSalmuera(BigDecimal tempSalmuera) {
+		this.tempSalmuera = tempSalmuera;
+	}
+
+	public List<ProveedorVO> getProveedores() {
+		return proveedores;
+	}
+
+	public void setProveedores(List<ProveedorVO> proveedores) {
+		this.proveedores = proveedores;
+	}
+
+	public String getHoraIngresoBombo() {
+		return horaIngresoBombo;
+	}
+
+	public void setHoraIngresoBombo(String horaIngresoBombo) {
+		this.horaIngresoBombo = horaIngresoBombo;
+	}
+
+	public String getHoraSalidaBombo() {
+		return horaSalidaBombo;
+	}
+
+	public void setHoraSalidaBombo(String horaSalidaBombo) {
+		this.horaSalidaBombo = horaSalidaBombo;
+	}
+
+	public String getUsuarioBombo() {
+		return usuarioBombo;
+	}
+
+	public void setUsuarioBombo(String usuarioBombo) {
+		this.usuarioBombo = usuarioBombo;
+	}
+
+	public String getHoraSalidaACamara() {
+		return horaSalidaACamara;
+	}
+
+	public void setHoraSalidaACamara(String horaSalidaACamara) {
+		this.horaSalidaACamara = horaSalidaACamara;
+	}
+
+	public Integer getNroTachoEnfriado() {
+		return nroTachoEnfriado;
+	}
+
+	public void setNroTachoEnfriado(Integer nroTachoEnfriado) {
+		this.nroTachoEnfriado = nroTachoEnfriado;
+	}
+
+	public BigDecimal getTempSalidaACamara() {
+		return tempSalidaACamara;
+	}
+
+	public void setTempSalidaACamara(BigDecimal tempSalidaACamara) {
+		this.tempSalidaACamara = tempSalidaACamara;
+	}
+
+	
 }

@@ -27,6 +27,7 @@ public class EntregasBackingBean extends GenericBean {
 	private Date fechaVencimiento;
 	private Integer cantidadPallets;
 	private Integer cantidadCajas;
+	private String unidad;
 	
 	private List<ProveedorVO> proveedores;
 	private ProveedorServices proveedorServices;
@@ -74,7 +75,7 @@ public class EntregasBackingBean extends GenericBean {
 		
 		hayErrores = true;
 		
-		EntregaVO nuevaEntrega = new EntregaVO(fechaIngreso, proveedor, tipoMateriaPrima, cantidad, tempIngreso, fechaElaboracion, fechaVencimiento, cantidadPallets, cantidadCajas);
+		EntregaVO nuevaEntrega = new EntregaVO(fechaIngreso, proveedor, tipoMateriaPrima, cantidad, tempIngreso, fechaElaboracion, fechaVencimiento, cantidadPallets, cantidadCajas, unidad);
 		
 		entregasService = new EntregasServices();
 		try {
@@ -91,6 +92,7 @@ public class EntregasBackingBean extends GenericBean {
 			fechaVencimiento = null;
 			cantidadPallets = null;
 			cantidadCajas = null;
+			unidad = null;
 			
 		} catch (EntregasException e) {
 			
@@ -226,5 +228,13 @@ public class EntregasBackingBean extends GenericBean {
 
 	public void setFechaHasta(Date fechaHasta) {
 		this.fechaHasta = fechaHasta;
+	}
+
+	public String getUnidad() {
+		return unidad;
+	}
+
+	public void setUnidad(String unidad) {
+		this.unidad = unidad;
 	}
 }
